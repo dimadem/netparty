@@ -56,7 +56,7 @@ class RoomScene(BaseScene):
             # 'g_o_background_dancefloor', 'o_g_background_dancefloor',
             'g_p_background_dancefloor', 'p_g_background_dancefloor',
             # 'g_v_background_dancefloor', 'v_g_background_dancefloor',
-            # 'o_p_background_dancefloor', 'p_o_background_dancefloor',
+            # 'o_p_background_dancefloor', 'p_o_background_danceflo or',
             # 'p_v_background_dancefloor', 'v_p_background_dancefloor'
         ]
         
