@@ -12,13 +12,8 @@ class ClubScene(BaseScene):
         # Инициализация спрайтов
         self.discoball = self.add_sprite('discoball', 
             Sprite('assets/pender_party/club/discoball.png', (1920 - (1920 / 2.9), -90), 0, 0.7))
-        # Инициализация конфигурации прожекторов
-        self.spot_configs = [
-            {'pos': [0, -100], 'angle': 0, 'scale': 1.0, 'speed': 2.0},
-            {'pos': [1400, -100], 'angle': 90, 'scale': 1.0, 'speed': 1.5},
-            {'pos': [600, -100], 'angle': 45, 'scale': 0.8, 'speed': 1.7}
-        ]
-
+        
+        self.colors = ['blue', 'lightrose', 'purple', 'rose']
         self.spot_animations = []
         self._create_spotlights()
         self._setup_spotlight_animations()
@@ -26,26 +21,35 @@ class ClubScene(BaseScene):
     def _create_spotlights(self):
         """Create spotlight sprites"""
         self.spot_sprites = []
-        for i, config in enumerate(self.spot_configs):
-            spot_group = []
-            for j in range(1, 5):
-                sprite = self.add_sprite(f'spot_{i}_{j}',
-                    Sprite(f'assets/pender_party/club/spot_{j}.png',
-                          config['pos'],
-                          config['angle'],
-                          config['scale']))
-                spot_group.append(sprite)
-            self.spot_sprites.append(spot_group)
+        base_config = {'pos': [0, 0], 'angle': 0, 'scale': 0.25}
+        
+        spot_group = []
+        for ray_num in range(3, 6):  # 7 групп лучей
+            color_group = []
+            for color in self.colors:
+                sprite = self.add_sprite(
+                    f'spot_{ray_num}_{color}',
+                    Sprite(f'assets/pender_party/club/{ray_num}{color}.png',
+                          base_config['pos'],
+                          base_config['angle'],
+                          base_config['scale'])
+                )
+                color_group.append(sprite)
+            spot_group.append(color_group)
+        self.spot_sprites.append(spot_group)
 
     def _setup_spotlight_animations(self):
         """Setup animations for spotlights"""
-        for i, config in enumerate(self.spot_configs):
-            for j, sprite in enumerate(self.spot_sprites[i], 1):
+        for ray_num, ray_group in enumerate(self.spot_sprites[0], 1):
+            # Добавляем противофазу: нечетные (1,3,5,7) vs четные (2,4,6) группы
+            opposite_phase = math.pi if ray_num % 2 == 0 else 0
+            
+            for j, sprite in enumerate(ray_group):
                 anim = AlphaAnimation(
                     sprite=sprite,
-                    duration=config['speed'],
+                    duration=2.0,
                     loop=True,
-                    phase_shift=j * math.pi / 2,
+                    phase_shift=(ray_num * math.pi / 7) + (j * math.pi / 4) + opposite_phase,
                     start_alpha=0,
                     end_alpha=255
                 )

@@ -89,5 +89,5 @@ class ViewportScene(BaseScene):
         self.space_purple.draw(screen)
         self.spaceship.draw(screen)
         # Отрисовываем все спрайты огня
-        for sprite in self.fire_sprites:
-            sprite.draw(screen)
+        # for sprite in self.fire_sprites:
+        #     sprite.draw(screen)

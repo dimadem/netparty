@@ -98,7 +98,7 @@ class RoomScene(BaseScene):
 
     def draw(self, screen):
         self.get_sprite('main_background').draw(screen)
-        self.draw_dancefloor(screen)
+        # self.draw_dancefloor(screen)
         self.get_sprite('girls_backstage').draw(screen)
         self.get_sprite('dj').draw(screen)
         self.get_sprite('dj_table').draw(screen)

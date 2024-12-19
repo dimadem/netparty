@@ -16,6 +16,14 @@ class Game:
     def __init__(self):
         pygame.init()
         self._init_display()
+        self.background = pygame.Surface(self.screen.get_size())
+        self.background = self.background.convert()
+        self.background.fill((0, 0, 0))
+        
+        # Создаем буфер для двойной буферизации
+        self.buffer = pygame.Surface(self.screen.get_size())
+        self.buffer = self.buffer.convert_alpha()
+        
         self.clock = pygame.time.Clock()
         self.running = True
         self.dt = 0
@@ -25,11 +33,14 @@ class Game:
 
     def _init_display(self):
         pygame.display.set_caption("Pender Party")
+        # Используем аппаратное ускорение и вертикальную синхронизацию
         self.screen = pygame.display.set_mode(
             (WINDOW_WIDTH, WINDOW_HEIGHT),
-            pygame.HWSURFACE | pygame.DOUBLEBUF | pygame.SCALED,
+            pygame.HWSURFACE | pygame.DOUBLEBUF | pygame.SCALED | pygame.HWACCEL,
             vsync=1
         )
+        # Устанавливаем приоритет таймера для более точного времени
+        pygame.time.set_timer(pygame.USEREVENT, 1000 // FPS)
 
     def _load_and_scale_image(self, path, scale_factor=None, scale_to_screen=False):
         image = pygame.image.load(path).convert_alpha()
@@ -53,7 +64,6 @@ class Game:
 
     def handle_events(self):
         for event in pygame.event.get():
-            print(f"Game: получено событие {event}")  # Отладочный вывод
             
             if event.type == pygame.QUIT:
                 self.running = False
@@ -79,9 +89,15 @@ class Game:
             self.scenes[self.current_scene].update(dt)
 
     def draw(self):
-        self.screen.fill((0, 0, 0))
+        # Очищаем буфер
+        self.buffer.fill((0, 0, 0, 0))
+        
+        # Рисуем текущую сцену в буфер
         if self.current_scene:
-            self.scenes[self.current_scene].draw(self.screen)
+            self.scenes[self.current_scene].draw(self.buffer)
+        
+        # Копируем буфер на экран
+        self.screen.blit(self.buffer, (0, 0))
         pygame.display.flip()
 
     def run(self):
