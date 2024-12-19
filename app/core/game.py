@@ -53,11 +53,17 @@ class Game:
 
     def handle_events(self):
         for event in pygame.event.get():
+            print(f"Game: получено событие {event}")  # Отладочный вывод
+            
             if event.type == pygame.QUIT:
                 self.running = False
-            if event.type == pygame.KEYDOWN:
+            elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     self.running = False
+                # Добавляем проброс события в текущую сцену
+                if self.current_scene:
+                    print(f"Game: пробрасываем событие в сцену {self.current_scene}")  # Отладочный вывод
+                    self.scenes[self.current_scene].handle_input(event)
 
     def update(self, dt):
         # Обработка смены сцены

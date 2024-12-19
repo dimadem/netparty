@@ -44,6 +44,8 @@ class CompositeScene(BaseScene):
             self.layers[layer_name].draw(screen)
 
     def handle_input(self, event):
-        # Обрабатываем ввод для каждого слоя в обратном порядке
+        print(f"CompositeScene: проброс события {event}")  # Отладочный вывод
+        # Перебираем слои в обратном порядке, чтобы верхние слои получали события первыми
         for layer_name in reversed(self.layer_order):
+            print(f"Отправка события в слой {layer_name}")  # Отладочный вывод
             self.layers[layer_name].handle_input(event)

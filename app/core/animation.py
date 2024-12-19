@@ -101,8 +101,12 @@ class PositionAnimation:
         self.elapsed_time = 0
         self.direction = 1
         self.phase_shift = phase_shift
+        self.is_running = True
         
     def update(self, dt):
+        if not self.is_running:
+            return
+
         self.elapsed_time += dt
         
         # Добавляем сдвиг фазы к времени
@@ -117,8 +121,21 @@ class PositionAnimation:
                 progress = (time_with_phase % self.duration) / self.duration
             else:
                 progress = min(time_with_phase / self.duration, 1)
+                if progress >= 1:
+                    self.is_running = False
         
         x = self.start_pos[0] + (self.end_pos[0] - self.start_pos[0]) * progress
         y = self.start_pos[1] + (self.end_pos[1] - self.start_pos[1]) * progress
         
         self.sprite.position = (x, y)
+
+    def start(self):
+        self.is_running = True
+        
+    def stop(self):
+        self.is_running = False
+        
+    def reset(self):
+        self.elapsed_time = 0
+        self.is_running = True
+        self.sprite.position = self.start_pos

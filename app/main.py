@@ -3,6 +3,7 @@ from app.core.composite_scene import CompositeScene
 from app.scenes.viewport import ViewportScene
 from app.scenes.club import ClubScene
 from app.scenes.room import RoomScene
+from app.scenes.stickers import Stickers
 import pygame
 
 class PenderParty(Game):
@@ -29,11 +30,13 @@ def main():
         room_layer = RoomScene()
         club_layer = ClubScene()
         viewport_layer = ViewportScene()
+        stickers_layer = Stickers()
         
         # Добавляем слои в правильном порядке отрисовки (от заднего к переднему)
         main_scene.add_layer('viewport', viewport_layer, 0)  # Передний слой
         main_scene.add_layer('room', room_layer, 1)      # Задний фон
         main_scene.add_layer('club', club_layer, 2)      # Средний слой
+        main_scene.add_layer('stickers', stickers_layer, 3)
         
         # Добавляем композитную сцену в игру
         game.add_scene('main', main_scene)
