@@ -63,7 +63,6 @@ class ClubScene(BaseScene):
     def draw(self, screen):
         # discoball
         self.discoball.draw(screen)
-        self.purple_discoball.draw(screen)
         # lights
         for _, lights in self.sprites.items():
             lights.draw(screen)

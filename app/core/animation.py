@@ -89,3 +89,36 @@ class AlphaAnimation(SpriteAnimation):
         
         current_alpha = int(self.start_alpha + (self.end_alpha - self.start_alpha) * progress)
         self.sprite.set_alpha(current_alpha)
+
+class PositionAnimation:
+    def __init__(self, sprite, duration, start_pos, end_pos, loop=False, ping_pong=False, phase_shift=0):
+        self.sprite = sprite
+        self.duration = duration
+        self.start_pos = start_pos
+        self.end_pos = end_pos
+        self.loop = loop
+        self.ping_pong = ping_pong
+        self.elapsed_time = 0
+        self.direction = 1
+        self.phase_shift = phase_shift
+        
+    def update(self, dt):
+        self.elapsed_time += dt
+        
+        # Добавляем сдвиг фазы к времени
+        time_with_phase = self.elapsed_time + (self.phase_shift * self.duration)
+        
+        if self.ping_pong:
+            progress = (time_with_phase % (2 * self.duration)) / self.duration
+            if progress > 1:
+                progress = 2 - progress
+        else:
+            if self.loop:
+                progress = (time_with_phase % self.duration) / self.duration
+            else:
+                progress = min(time_with_phase / self.duration, 1)
+        
+        x = self.start_pos[0] + (self.end_pos[0] - self.start_pos[0]) * progress
+        y = self.start_pos[1] + (self.end_pos[1] - self.start_pos[1]) * progress
+        
+        self.sprite.position = (x, y)
