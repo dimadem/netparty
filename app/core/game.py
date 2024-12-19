@@ -19,6 +19,9 @@ class Game:
         self.clock = pygame.time.Clock()
         self.running = True
         self.dt = 0
+        self.scenes = {}
+        self.current_scene = None
+        self.next_scene = None
 
     def _init_display(self):
         pygame.display.set_caption("Pender Party")
@@ -41,6 +44,13 @@ class Game:
             return image
         return pygame.transform.scale(image, new_size)
 
+    def add_scene(self, name, scene):
+        self.scenes[name] = scene
+        
+    def change_scene(self, scene_name):
+        if scene_name in self.scenes:
+            self.next_scene = scene_name
+
     def handle_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -50,10 +60,22 @@ class Game:
                     self.running = False
 
     def update(self, dt):
-        pass
+        # Обработка смены сцены
+        if self.next_scene:
+            if self.current_scene:
+                self.scenes[self.current_scene].on_exit()
+            self.current_scene = self.next_scene
+            self.scenes[self.current_scene].on_enter()
+            self.next_scene = None
+
+        # Обновление текущей сцены
+        if self.current_scene:
+            self.scenes[self.current_scene].update(dt)
 
     def draw(self):
         self.screen.fill((0, 0, 0))
+        if self.current_scene:
+            self.scenes[self.current_scene].draw(self.screen)
         pygame.display.flip()
 
     def run(self):

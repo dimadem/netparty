@@ -1,35 +1,73 @@
 from app.core.sprite import Sprite
+from app.core.scene import BaseScene
+from app.core.animation import AlphaAnimation
 import math
 
-class ClubScene:
+class ClubScene(BaseScene):
     def __init__(self):
-        self.discoball = Sprite('assets/pender_party/club/discoball.png', (1920 - 1920 / 2.8 , -120), 1.0)
-        self.spot_1 = Sprite('assets/pender_party/club/spot_1.png', (0, 0), 1.0)
-        self.spot_2 = Sprite('assets/pender_party/club/spot_2.png', (0, 0), 1.0)
-        self.spot_3 = Sprite('assets/pender_party/club/spot_3.png', (0, 0), 1.0)
-        self.spot_4 = Sprite('assets/pender_party/club/spot_4.png', (0, 0), 1.0)
-        self.spots = [self.spot_1, self.spot_2, self.spot_3, self.spot_4]
-        self.animation_time = 0
-        self.base_alpha = 255
+        super().__init__()  # Добавляем вызов родительского конструктора
 
-    def _discoball_animation(self, dt):
-        self.animation_time += dt
-        disco_pulse = 0.35 * math.sin(self.animation_time * math.pi) + 0.65
-        disco_alpha = int(self.base_alpha * disco_pulse)
-        self.discoball.set_alpha(disco_alpha)
+    def initialize(self):
+        """Initialize club scene objects"""
+        # Инициализация спрайтов
+        self.discoball = self.add_sprite('discoball', 
+            Sprite('assets/pender_party/club/discoball.png', (1920 - 1920 / 2.8, -120), 0, 1.0))
 
-    def _spot_animation(self, dt):
-        for i, spot in enumerate(self.spots):
-            phase_shift = i * math.pi / 2
-            spot_pulse = 0.5 * math.sin(self.animation_time * math.pi * 2 + phase_shift) + 0.5
-            spot_alpha = int(self.base_alpha * spot_pulse)
-            spot.set_alpha(spot_alpha)
-    
+        # Инициализация прожекторов
+        self.spot_configs = [
+            {'pos': [0, -100], 'angle': 0, 'scale': 1.0, 'speed': 2.0},
+            {'pos': [1400, -100], 'angle': 90, 'scale': 1.0, 'speed': 1.5},
+            {'pos': [600, -100], 'angle': 45, 'scale': 0.8, 'speed': 1.7}
+        ]
+
+        self.spot_animations = []
+        
+        # Создаем спрайты и анимации для каждого прожектора
+        for i, config in enumerate(self.spot_configs):
+            spots = []
+            for j in range(1, 5):  # 4 луча для каждого прожектора
+                sprite = self.add_sprite(f'spot_{i}_{j}',
+                    Sprite(f'assets/pender_party/club/spot_{j}.png',
+                          config['pos'],
+                          config['angle'],
+                          config['scale']))
+                
+                # Создаем анимацию для каждого луча
+                anim = AlphaAnimation(
+                    sprite=sprite,
+                    duration=config['speed'],
+                    loop=True,
+                    phase_shift=j * math.pi / 2,  # Сдвиг фазы для каждого луча
+                    start_alpha=0,
+                    end_alpha=255
+                )
+                self.spot_animations.append(anim)
+
+        # Создаем анимацию для диско-шара
+        self.disco_animation = AlphaAnimation(
+            sprite=self.discoball,
+            duration=1.0,
+            loop=True,
+            start_alpha=100,
+            end_alpha=255
+        )
+
     def update(self, dt):
-        self._discoball_animation(dt)
-        self._spot_animation(dt)
+        if not self.active:
+            return
+        
+        # Обновляем все анимации
+        self.disco_animation.update(dt)
+        for anim in self.spot_animations:
+            anim.update(dt)
+        
+        super().update(dt)
 
     def draw(self, screen):
-        for spot in self.spots:
-            spot.draw(screen)
-        self.discoball.draw(screen)
+        # Отрисовка всех спрайтов
+        for name, sprite in self.sprites.items():
+            sprite.draw(screen)
+
+    def handle_input(self, event):
+        """Handle input events"""
+        pass  # Добавляем обязательную реализацию абстрактного метода

@@ -1,4 +1,5 @@
 from app.core.game import Game, game_context
+from app.core.composite_scene import CompositeScene
 from app.scenes.viewport import ViewportScene
 from app.scenes.club import ClubScene
 from app.scenes.room import RoomScene
@@ -7,30 +8,38 @@ import pygame
 class PenderParty(Game):
     def __init__(self):
         super().__init__()
-        self.scenes = {
-            'room': RoomScene(),
-            'viewport': ViewportScene(),
-            'club': ClubScene(),
-        }
-        self.current_scene = 'room'
+        self.current_scene = None
 
     def update(self, dt):
-        self.scenes['viewport'].update(dt)
-        self.scenes['room'].update(dt)
-        self.scenes['club'].update(dt)
+        if self.current_scene:
+            self.scenes[self.current_scene].update(dt)
 
     def draw(self):
         self.screen.fill((0, 0, 0))
-        # Отрисовываем сцены в нужном порядке наслоения
-        self.scenes['viewport'].draw(self.screen)  # Сначала viewport (нижний слой)
-        self.scenes['room'].draw(self.screen)      # Затем room (средний слой)
-        self.scenes['club'].draw(self.screen)      # И наконец club (верхний слой)
-        pygame.display.flip()  # Добавляем обновление экрана
+        if self.current_scene:
+            self.scenes[self.current_scene].draw(self.screen)
+        pygame.display.flip()
 
 def main():
-    with game_context():
-        pender_party = PenderParty()
-        pender_party.run()
+    with game_context() as game:
+        # Создаем композитную сцену для главного экрана
+        main_scene = CompositeScene()
+        
+        # Создаем слои
+        room_layer = RoomScene()
+        club_layer = ClubScene()
+        viewport_layer = ViewportScene()
+        
+        # Добавляем слои в правильном порядке отрисовки (от заднего к переднему)
+        main_scene.add_layer('viewport', viewport_layer, 0)  # Передний слой
+        main_scene.add_layer('room', room_layer, 1)      # Задний фон
+        main_scene.add_layer('club', club_layer, 2)      # Средний слой
+        
+        # Добавляем композитную сцену в игру
+        game.add_scene('main', main_scene)
+        game.change_scene('main')
+        
+        game.run()
 
 if __name__ == "__main__":
     main()

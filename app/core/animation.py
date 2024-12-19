@@ -1,3 +1,5 @@
+import math  # Добавляем импорт в начало файла
+
 class Animation:
     def __init__(self, frames, speed):
         self.frames = frames
@@ -29,3 +31,42 @@ class Animation:
         
     def get_current_frame(self):
         return self.frames[self.current_frame]
+
+class SpriteAnimation:
+    def __init__(self, sprite, duration=1.0, loop=True):
+        self.sprite = sprite
+        self.duration = duration
+        self.loop = loop
+        self.time = 0
+        self.completed = False
+
+    def update(self, dt):
+        if self.completed and not self.loop:
+            return
+
+        self.time += dt
+        if self.time >= self.duration:
+            if self.loop:
+                self.time = 0
+            else:
+                self.completed = True
+
+    def reset(self):
+        self.time = 0
+        self.completed = False
+
+class AlphaAnimation(SpriteAnimation):
+    def __init__(self, sprite, start_alpha=0, end_alpha=255, phase_shift=0, **kwargs):
+        super().__init__(sprite, **kwargs)
+        self.start_alpha = start_alpha
+        self.end_alpha = end_alpha
+        self.phase_shift = phase_shift  # Добавляем сдвиг фазы
+
+    def update(self, dt):
+        super().update(dt)
+        progress = (self.time / self.duration) if self.duration > 0 else 1
+        if self.loop:
+            # Добавляем phase_shift в расчет прогресса
+            progress = (math.sin(progress * math.pi * 2 + self.phase_shift) + 1) / 2
+        current_alpha = int(self.start_alpha + (self.end_alpha - self.start_alpha) * progress)
+        self.sprite.set_alpha(current_alpha)
