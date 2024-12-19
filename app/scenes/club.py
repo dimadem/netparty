@@ -11,7 +11,7 @@ class ClubScene(BaseScene):
         """Initialize club scene objects"""
         # Инициализация спрайтов
         self.discoball = self.add_sprite('discoball', 
-            Sprite('assets/pender_party/club/discoball.png', (1920 - 1920 / 2.8, -120), 0, 1.0))
+            Sprite('assets/pender_party/club/discoball.png', (1920 - (1920 / 2.9), -90), 0, 0.7))
         # Инициализация конфигурации прожекторов
         self.spot_configs = [
             {'pos': [0, -100], 'angle': 0, 'scale': 1.0, 'speed': 2.0},
