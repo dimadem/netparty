@@ -1,4 +1,5 @@
 import math  # Добавляем импорт в начало файла
+from functools import lru_cache
 
 class Animation:
     def __init__(self, frames, speed):
@@ -61,12 +62,30 @@ class AlphaAnimation(SpriteAnimation):
         self.start_alpha = start_alpha
         self.end_alpha = end_alpha
         self.phase_shift = phase_shift  # Добавляем сдвиг фазы
+        self._last_update_time = 0
+        self._update_interval = 1/30  # Обновляем анимацию 30 раз в секунду
+
+    @lru_cache(maxsize=1000)
+    def _calculate_progress(self, normalized_time):
+        """Кэшируем расчеты прогресса анимации"""
+        return (math.sin(normalized_time * math.pi * 2 + self.phase_shift) + 1) / 2
 
     def update(self, dt):
-        super().update(dt)
+        self.time += dt
+        
+        # Обновляем альфа только если прошло достаточно времени
+        current_time = self.time
+        if current_time - self._last_update_time < self._update_interval:
+            return
+
+        self._last_update_time = current_time
+        
+        if self.completed and not self.loop:
+            return
+
         progress = (self.time / self.duration) if self.duration > 0 else 1
         if self.loop:
-            # Добавляем phase_shift в расчет прогресса
-            progress = (math.sin(progress * math.pi * 2 + self.phase_shift) + 1) / 2
+            progress = self._calculate_progress(progress)
+        
         current_alpha = int(self.start_alpha + (self.end_alpha - self.start_alpha) * progress)
         self.sprite.set_alpha(current_alpha)

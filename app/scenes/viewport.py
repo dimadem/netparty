@@ -45,7 +45,7 @@ class ViewportScene(BaseScene):
         self._fire_animation(dt)
 
     def draw(self, screen):
-        self.space_black.draw(screen)
+        # self.space_black.draw(screen)
         self.space_purple.draw(screen)
         self.spaceship.draw(screen)
-        self.fire_sprites[self.current_fire].draw(screen)
+        # self.fire_sprites[self.current_fire].draw(screen)

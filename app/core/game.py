@@ -6,7 +6,7 @@ from contextlib import contextmanager
 # Constants
 WINDOW_WIDTH = 1920
 WINDOW_HEIGHT = 1080
-FPS = 60
+FPS = 30
 SCALE_FACTOR = 0.8
 SPACESHIP_SCALE = 0.5
 ANIMATION_SPEED = 0.3
