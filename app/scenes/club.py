@@ -11,9 +11,12 @@ class ClubScene(BaseScene):
         """Initialize club scene objects"""
         # Инициализация спрайтов
         self.discoball = self.add_sprite('discoball', 
-            Sprite('assets/pender_party/club/discoball.png', (1920 - (1920 / 2.9), -90), 0, 0.7))
+            Sprite('assets/pender_party/club/discoball.png', (1920 - (1920 / 2.9), -90), 0, 0.7 / 2))
         
-        self.colors = ['blue', 'lightrose', 'purple', 'rose']
+        self.colors = ['blue', 
+                        'lightrose', 
+                        'purple', 
+                        'rose']
         self.spot_animations = []
         self._create_spotlights()
         self._setup_spotlight_animations()
@@ -21,10 +24,10 @@ class ClubScene(BaseScene):
     def _create_spotlights(self):
         """Create spotlight sprites"""
         self.spot_sprites = []
-        base_config = {'pos': [0, 0], 'angle': 0, 'scale': 0.25}
+        base_config = {'pos': [0, 0], 'angle': 0, 'scale': 0.25 / 2}
         
         spot_group = []
-        for ray_num in range(3, 6):  # 7 групп лучей
+        for ray_num in range(1, 8):  # 7 групп лучей
             color_group = []
             for color in self.colors:
                 sprite = self.add_sprite(

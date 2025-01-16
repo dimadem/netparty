@@ -4,14 +4,14 @@ from app.core.scene import BaseScene
 
 class ViewportScene(BaseScene):
     def __init__(self):
-        self.fire_position = [700, 370]
-        self.fire_scale = 1 / 4
+        self.fire_position = [700 / 2, 370 / 2]
+        self.fire_scale = (1 / 4) / 2
         self.fire_orange = Sprite('assets/pender_party/viewport/fire_orange.png', self.fire_position, 0, self.fire_scale)
         self.fire_red = Sprite('assets/pender_party/viewport/fire_red.png', self.fire_position, 0, self.fire_scale)
         self.fire_yellow = Sprite('assets/pender_party/viewport/fire_yellow.png', self.fire_position, 0, self.fire_scale)
-        self.space_black = Sprite('assets/pender_party/viewport/space_black.png', (800, 0), 0, 0.2)
-        self.space_purple = Sprite('assets/pender_party/viewport/space_purple.png', (700, 0), 0, 0.5)
-        self.spaceship = Sprite('assets/pender_party/viewport/spaceship.svg', (-60, 600), 0, 0.2)
+        self.space_black = Sprite('assets/pender_party/viewport/space_black.png', (800 / 2, 0), 0, 0.2 / 2)
+        self.space_purple = Sprite('assets/pender_party/viewport/space_purple.png', (700 / 2, 0), 0, 0.5 / 2)
+        self.spaceship = Sprite('assets/pender_party/viewport/spaceship.svg', (-60 / 2, 600 / 2), 0, 0.2 / 2)
         self.spaceship_animation = None
         self.fire_sprites = [self.fire_red, self.fire_orange, self.fire_yellow, self.fire_orange]
         self.fire_animations = []
@@ -25,10 +25,10 @@ class ViewportScene(BaseScene):
         self._setup_fire_animations()
 
     def _setup_spaceship_animation(self):
-        start_x = -60      # Начальная позиция слева
-        end_x = 2400       # Конечная позиция справа
-        start_y = 600      # Начальная позиция внизу
-        end_y = 100        # Конечная позиция вверху
+        start_x = -60 / 2      # Начальная позиция слева
+        end_x = 2400 / 2       # Конечная позиция справа
+        start_y = 600 / 2      # Начальная позиция внизу
+        end_y = 100 / 2        # Конечная позиция вверху
         
         self.spaceship_animation = PositionAnimation(
             self.spaceship,

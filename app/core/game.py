@@ -4,8 +4,8 @@ from pathlib import Path
 from contextlib import contextmanager
 
 # Constants
-WINDOW_WIDTH = 1920
-WINDOW_HEIGHT = 1080
+WINDOW_WIDTH = 1920 / 2
+WINDOW_HEIGHT = 1080 /2
 FPS = 30
 SCALE_FACTOR = 0.8
 SPACESHIP_SCALE = 0.5

@@ -8,14 +8,14 @@ class Stickers(BaseScene):
         self.stickers = {}
         self.sticker_animations = {}
         self.sticker_states = {}
-        self.base_position = (1920 - 700, 1200)
-        self.up_position = (1920 - 700, 600)
+        self.base_position = ((1920 - 700) / 2, 1200 / 2)
+        self.up_position = ((1920 - 700) / 2, 600 / 2)
         super().__init__()
         self.active = True
 
     def initialize(self):
         print("Инициализация стикеров...")
-        SCALE = 1
+        SCALE = 1 / 2
         
         # Словарь стикеров и их клавиш
         sticker_configs = {

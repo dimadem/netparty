@@ -11,7 +11,7 @@ class RoomScene(BaseScene):
     def initialize(self):
         self.dancefloor_animations = []
         
-        SCALE = 1/4
+        SCALE = (1/4) / 2
         
         self.add_sprite('main_background', Sprite('assets/pender_party/room/main_background_stage.png', (0, 0), 0, SCALE))
 
@@ -27,7 +27,7 @@ class RoomScene(BaseScene):
                     Sprite(f'assets/pender_party/room/{name}_background_dancefloor.png', (0, 0), 0, SCALE)
                 )
 
-        self.add_sprite('dj', Sprite('assets/pender_party/room/dj_pender.svg', (340, 400), 0, 0.9))
+        self.add_sprite('dj', Sprite('assets/pender_party/room/dj_pender.svg', (340 / 2, 400 / 2), 0, 0.9 / 2))
         self.add_sprite('girls_backstage', Sprite('assets/pender_party/room/girls_backstage.png', (0, 0), 0, SCALE))
         self.add_sprite('dj_table', Sprite('assets/pender_party/room/dj_table.png', (0, 0), 0, SCALE))
 
@@ -100,7 +100,7 @@ class RoomScene(BaseScene):
         self.get_sprite('main_background').draw(screen)
         # self.draw_dancefloor(screen)
         self.get_sprite('girls_backstage').draw(screen)
-        self.get_sprite('dj').draw(screen)
+        # self.get_sprite('dj').draw(screen)
         self.get_sprite('dj_table').draw(screen)
 
     def handle_input(self, event):
