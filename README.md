@@ -1,2 +1,4 @@
-# netparty
-https://docs.substreams.dev
+# penderparty
+
+## made with
+https://www.pygame.org/news
